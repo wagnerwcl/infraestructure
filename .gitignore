@@ -1,7 +1,6 @@
-.terraform
+*.terraform*
 .vscode
 *.tfstate
 *.tfstate.backup
 *.out
 .terragrunt-cache
-readme.md
