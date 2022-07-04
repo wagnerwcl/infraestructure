@@ -4,3 +4,4 @@
 *.tfstate.backup
 *.out
 .terragrunt-cache
+*.lock.hcl
