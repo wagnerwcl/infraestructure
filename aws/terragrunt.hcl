@@ -10,11 +10,11 @@ terraform {
       "destroy",
     ]
 
-    required_var_files = [
-      "${find_in_parent_folders("env.tfvars")}",
-      "${find_in_parent_folders("region.tfvars")}",
-      "${find_in_parent_folders("global.tfvars")}",
-    ]
+    // required_var_files = [
+    //   "${find_in_parent_folders("env.tfvars")}",
+    //   "${find_in_parent_folders("region.tfvars")}",
+    //   "${find_in_parent_folders("global.tfvars")}",
+    // ]
   }
 }
 
