@@ -2,6 +2,10 @@ locals {
   vpc_id = try(aws_vpc.main[0].id, "")
 }
 
+####################################
+# VPC
+####################################
+
 resource "aws_vpc" "main" {
   count            = var.create_vpc ? 1 : 0
   cidr_block       = var.cidr_block
@@ -12,6 +16,10 @@ resource "aws_vpc" "main" {
     var.tags,
   )
 }
+
+####################################
+# Subnet
+####################################
 
 resource "aws_subnet" "main_public" {
   count             = var.create_vpc && length(var.public_subnets) > 0 ? length(var.public_subnets)  : 0
@@ -44,4 +52,46 @@ resource "aws_subnet" "main_private" {
     },
     var.tags,
   )
+}
+
+####################################
+# Internet Gateway
+####################################
+
+resource "aws_internet_gateway" "main" {
+  count = var.create_vpc && var.create_igw && length(var.public_subnets) > 0 ? 1 : 0
+
+  vpc_id = local.vpc_id
+
+  tags = merge(
+    { "Name" = var.name },
+    var.tags,
+  )
+}
+
+####################################
+# Route Table
+####################################
+
+resource "aws_route_table" "main_public" {
+  count = var.create_vpc && length(var.public_subnets) > 0 ? 1 : 0
+
+  vpc_id = local.vpc_id
+
+  tags = merge(
+    { "Name" = "${var.name}-public" },
+    var.tags,
+  )
+}
+
+resource "aws_route" "main_public" {
+  count = var.create_vpc && var.create_igw && length(var.public_subnets) > 0 ? 1 : 0
+
+  route_table_id         = aws_route_table.main_public[0].id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_internet_gateway.main[0].id
+
+  timeouts {
+    create = "5m"
+  }
 }

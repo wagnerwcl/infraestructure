@@ -59,9 +59,11 @@ variable "azs" {
 }
 
 #############################
-# ambient
+# aws_internet_gateway
 #############################
 
-# variable "env" {}
-# variable "region" {}
-# variable "manage_by" {}
+variable "create_igw" {
+  description = "Enable the creation of resource"
+  type = bool
+  default = true
+}

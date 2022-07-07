@@ -1,0 +1,2 @@
+# Infraestructure
+This repository manages my infraestrucuture I'm using terraform and terragrunt for this, first I'm building infra with aws cloud but the objective is build a multi-region and multi-cloud infraestructure for study purpose.

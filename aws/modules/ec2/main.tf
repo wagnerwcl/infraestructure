@@ -1,3 +1,6 @@
+##########################
+# Data
+##########################
 
 data "aws_ami" "amazon" {
   most_recent = true
@@ -5,13 +8,22 @@ data "aws_ami" "amazon" {
 
   filter {
     name   = "name"
-    values = ["amzn2-ami-kernel-5.10-hvm-*-arm64-*"]
+    values = ["amzn2-ami-kernel-5.10-hvm-*"]
   }
 }
 
-output "amazon_image_id" {
-  value = data.aws_ami.amazon.id
+##########################
+# Instance
+##########################
+
+resource "aws_instance" "main" {
+  count         = var.create_instance ? 1 : 0 
+  ami           = data.aws_ami.amazon.id
+  instance_type = var.instance_type
+
+  tags = merge(
+    {"Name" = "${var.name}"},
+    var.tags,
+  )
 }
-
-
 
